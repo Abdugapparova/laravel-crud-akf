@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\products;
+use App\Models\Products;
 use Illuminate\Http\Request;
 
 class ProductsController extends Controller
@@ -35,7 +35,15 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //validate the input
+        $request->validate([
+            'name' =>'required',
+            'detail' =>'required'
+        ]);
+        //create a new product in the database
+        Products::create($request->all());
+        //redirect the user and send friendly message 
+        return redirect()->route('products.index')->with('success','Product created successfully!');
     }
 
     /**
@@ -44,7 +52,7 @@ class ProductsController extends Controller
      * @param  \App\Models\Products  $Products
      * @return \Illuminate\Http\Response
      */
-    public function show(products $Products)
+    public function show(Products $Products)
     {
         //
     }

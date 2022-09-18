@@ -8,6 +8,8 @@
             <h2>Add New Product</h2>
         </div>
         <div class="pull-right">
+            {{-- route верни на страницу products (link to products page) --}}
+            {{-- also here index is a our function --}}
             <a class="btn btn-primary" href="{{ route('products.index') }}"> Back</a>
         </div>
     </div>
