@@ -14,7 +14,10 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        //
+        // paginate(number of products what we want to see in one page)
+        $products=Products::latest()->paginate(5);
+
+        return view('products.index', compact('products'))->with(request()->input('page'));
     }
 
     /**
@@ -40,8 +43,10 @@ class ProductsController extends Controller
             'name' =>'required',
             'detail' =>'required'
         ]);
+
         //create a new product in the database
         Products::create($request->all());
+
         //redirect the user and send friendly message 
         return redirect()->route('products.index')->with('success','Product created successfully!');
     }
@@ -52,9 +57,10 @@ class ProductsController extends Controller
      * @param  \App\Models\Products  $Products
      * @return \Illuminate\Http\Response
      */
-    public function show(Products $Products)
+    public function show(Products $product)
     {
-        //
+        return view('products.show',compact('product'));
+
     }
 
     /**
@@ -63,9 +69,9 @@ class ProductsController extends Controller
      * @param  \App\Models\Products  $Products
      * @return \Illuminate\Http\Response
      */
-    public function edit(Products $Products)
+    public function edit(Products $product)
     {
-        //
+        return view('products.edit',compact('product'));
     }
 
     /**
@@ -75,9 +81,19 @@ class ProductsController extends Controller
      * @param  \App\Models\Products  $Products
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Products $Products)
+    public function update(Request $request, Products $product)
     {
-        //
+        //validate the input
+        $request->validate([
+            'name' =>'required',
+            'detail' =>'required'
+        ]);
+
+        //update a new product in the database
+        $product->update($request->all());
+
+        //redirect the user and send friendly message 
+        return redirect()->route('products.index')->with('success','Product updated successfully!');
     }
 
     /**
@@ -86,8 +102,13 @@ class ProductsController extends Controller
      * @param  \App\Models\Products  $Products
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Products $Products)
+    public function destroy(Products $product)
     {
-        //
+        //delete the product
+        $product->delete();
+
+        //redirect the user and display succes message
+        return redirect()->route('products.index')->with('success','Product deleted successfully!');
+
     }
 }
